@@ -6,4 +6,4 @@ export default () => {
     Container.set("chatbotEntity", Chatbot);
 
     Container.set("skillEntity", Skill);
-}
+};

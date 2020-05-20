@@ -6,4 +6,4 @@ export default () => {
     
     chatbot({ router });
     return router;
-}
+};

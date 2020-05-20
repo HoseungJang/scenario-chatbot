@@ -16,4 +16,4 @@ export default ({ router }: { router: Router }) => {
             return next(err);
         }
     });
-}
+};
