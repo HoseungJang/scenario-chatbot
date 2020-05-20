@@ -1,5 +1,7 @@
 import * as express from "express";
 import loader from "./loaders";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 type Application = express.Application;
 
