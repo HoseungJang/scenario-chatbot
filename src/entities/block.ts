@@ -1,8 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { Skill } from "./skill";
 import { Message } from "./message";
-import { Input } from "./input";
-import { Button } from "./button";
 
 @Entity()
 export class Block {
