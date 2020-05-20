@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import { Block } from "./block";
 
 @Entity()
 export class Input {
@@ -25,9 +24,17 @@ export class Input {
     })
     variableName: string;
 
-    @ManyToOne(type => Block, block => block.inputs, {
+    @Column({
+        type: "int",
         nullable: false,
-        onDelete: "CASCADE"
+        width: 11
     })
-    block: Block;
+    previous: number;
+
+    @Column({
+        type: "int",
+        nullable: false,
+        width: 11
+    })
+    jumpTo: number;
 }
