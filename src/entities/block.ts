@@ -15,12 +15,6 @@ export class Block {
     })
     name: string;
 
-    @Column({
-        type: "varchar",
-        nullable: true
-    })
-    nextType: string;
-
     @ManyToOne(type => Skill, skill => skill.blocks, {
         nullable: false,
         onDelete: "CASCADE"
@@ -31,14 +25,4 @@ export class Block {
         cascade: true
     })
     messages: Message[];
-
-    @OneToMany(type => Input, input => input.block, {
-        cascade: true
-    })
-    inputs: Input[];
-
-    @OneToMany(type => Button, button => button.block, {
-        cascade: true
-    })
-    buttons: Button[];
 }
