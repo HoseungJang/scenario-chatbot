@@ -10,7 +10,7 @@ const router: Router = Router();
 export default ({ app }: { app: Router }) => {
     app.use("/chatbot", router);
 
-    router.post("/", middlewares.checkExistChatbot, async (req: Request, res: Response, next: NextFunction) => {
+    router.post("/", middlewares.checkBeforeCreateChatbot, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const chatbotServiceInstance = Container.get(ChatbotService);
             const result = await chatbotServiceInstance.createChatbot(req.body as IChatbotDTO);
@@ -22,7 +22,7 @@ export default ({ app }: { app: Router }) => {
         }
     });
 
-    router.post("/:id/skill", async (req: Request, res: Response, next: NextFunction) => {
+    router.post("/:id/skill", middlewares.checkBeforeCreateSkill, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { name } = req.body;
             const chatbotId = Number(req.params.id);
