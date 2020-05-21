@@ -13,13 +13,8 @@ export class Block {
     })
     name: string;
 
-    @ManyToOne(type => Skill, skill => skill.blocks, {
+    @ManyToOne(type => Skill, {
         onDelete: "CASCADE"
     })
     skill: Skill;
-
-    @OneToMany(type => Message, message => message.block, {
-        cascade: true
-    })
-    messages: Message[];
 }

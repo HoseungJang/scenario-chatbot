@@ -17,9 +17,4 @@ export class Chatbot {
         nullable: false
     })
     role: string;
-
-    @OneToMany(type => Skill, skill => skill.chatbot, {
-        cascade: true
-    })
-    skills: Skill[];
 }

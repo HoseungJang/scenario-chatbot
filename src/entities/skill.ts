@@ -13,13 +13,8 @@ export class Skill {
     })
     name: string;
 
-    @ManyToOne(type => Chatbot, chatbot => chatbot.skills, {
+    @ManyToOne(type => Chatbot, {
         onDelete: "CASCADE"
     })
     chatbot: Chatbot;
-
-    @OneToMany(type => Block, block => block.skill, {
-        cascade: true
-    })
-    blocks: Block[];
 }

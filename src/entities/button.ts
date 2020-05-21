@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Block } from "../entities/block";
 
 @Entity()
 export class Button {
@@ -12,17 +13,15 @@ export class Button {
     })
     data: string;
     
-    @Column({
-        type: "int",
-        nullable: false,
-        width: 11
+    @ManyToOne(type => Block, {
+        onDelete: "CASCADE"
     })
+    @JoinColumn({ name: "previous" })
     previous: number;
 
-    @Column({
-        type: "int",
-        nullable: false,
-        width: 11
+    @ManyToOne(type => Block, {
+        onDelete: "CASCADE"
     })
+    @JoinColumn({ name: "jumpTo" })
     jumpTo: number;
 }
