@@ -26,7 +26,6 @@ export class Message {
     slot: boolean;
 
     @ManyToOne(type => Block, block => block.messages, {
-        nullable: false,
         onDelete: "CASCADE"
     })
     block: Block;

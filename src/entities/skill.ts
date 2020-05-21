@@ -14,7 +14,6 @@ export class Skill {
     name: string;
 
     @ManyToOne(type => Chatbot, chatbot => chatbot.skills, {
-        nullable: false,
         onDelete: "CASCADE"
     })
     chatbot: Chatbot;

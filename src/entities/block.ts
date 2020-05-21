@@ -14,7 +14,6 @@ export class Block {
     name: string;
 
     @ManyToOne(type => Skill, skill => skill.blocks, {
-        nullable: false,
         onDelete: "CASCADE"
     })
     skill: Skill;
