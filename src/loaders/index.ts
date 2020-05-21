@@ -7,4 +7,4 @@ export default ({ app }: { app: Application }) => {
     typeormLoader();
     expressLoader({ app });
     dependencyInjectorLoader();
-};
+}

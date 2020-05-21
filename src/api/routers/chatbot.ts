@@ -35,4 +35,4 @@ export default ({ app }: { app: Router }) => {
             return next(err);
         }
     });
-};
+}
