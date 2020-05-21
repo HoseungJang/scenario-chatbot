@@ -10,11 +10,16 @@ export default ({ app }: { app: Router }) => {
     app.use("/skill", router);
 
     router.post("/:id/block", middlewares.checkBeforeCreateBlock, async (req: Request, res: Response, next: NextFunction) => {
-        const { name } = req.body;
-        const skillId = Number(req.params.id);
-        const skillServiceInstance = Container.get(SkillService);
-        const result: IBlock = await skillServiceInstance.createBlock({ name, skillId } as IBlockDTO);
-
-        return res.status(201).json({ result });
+        try {
+            const { name } = req.body;
+            const skillId = Number(req.params.id);
+            const skillServiceInstance = Container.get(SkillService);
+            const result: IBlock = await skillServiceInstance.createBlock({ name, skillId } as IBlockDTO);
+    
+            return res.status(201).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
     });
 }
