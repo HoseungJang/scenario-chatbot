@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Container } from "typedi";
 import { ChatbotService } from "../../services/chatbot";
-import { IChatbotDTO } from "../../interfaces/IChatbot";
+import { IChatbot, IChatbotDTO } from "../../interfaces/IChatbot";
 import { ISkill, ISkillDTO } from "../../interfaces/ISkill";
 import middlewares from "../middlewares";
 
@@ -13,7 +13,7 @@ export default ({ app }: { app: Router }) => {
     router.post("/", middlewares.checkBeforeCreateChatbot, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const chatbotServiceInstance = Container.get(ChatbotService);
-            const result = await chatbotServiceInstance.createChatbot(req.body as IChatbotDTO);
+            const result: IChatbot = await chatbotServiceInstance.createChatbot(req.body as IChatbotDTO);
 
             return res.status(201).json(result);
         } catch (err) {
@@ -27,8 +27,8 @@ export default ({ app }: { app: Router }) => {
             const { name } = req.body;
             const chatbotId = Number(req.params.id);
             const chatbotServiceInstance = Container.get(ChatbotService);
-            
             const result: ISkill = await chatbotServiceInstance.createSkill({ name, chatbotId } as ISkillDTO);
+            
             return res.status(201).json(result);
         } catch (err) {
             console.error(err);
