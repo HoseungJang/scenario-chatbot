@@ -15,7 +15,7 @@ export default ({ app }: { app: Router }) => {
             const chatbotServiceInstance = Container.get(ChatbotService);
             const result: IChatbot = await chatbotServiceInstance.createChatbot(req.body as IChatbotDTO);
 
-            return res.status(201).json(result);
+            return res.status(201).json({ result });
         } catch (err) {
             console.error(err);
             return next(err);
@@ -29,7 +29,7 @@ export default ({ app }: { app: Router }) => {
             const chatbotServiceInstance = Container.get(ChatbotService);
             const result: ISkill = await chatbotServiceInstance.createSkill({ name, chatbotId } as ISkillDTO);
             
-            return res.status(201).json(result);
+            return res.status(201).json({ result });
         } catch (err) {
             console.error(err);
             return next(err);

@@ -15,6 +15,6 @@ export default ({ app }: { app: Router }) => {
         const skillServiceInstance = Container.get(SkillService);
         const result: IBlock = await skillServiceInstance.createBlock({ name, skillId } as IBlockDTO);
 
-        return res.status(201).json(result);
+        return res.status(201).json({ result });
     });
 }
