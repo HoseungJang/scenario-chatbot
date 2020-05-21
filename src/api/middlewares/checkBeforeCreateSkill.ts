@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from "express";
 export async function checkBeforeCreateSkill(req: Request, res: Response, next: NextFunction) {
     try {
         const { name } = req.body;
-        const { id: chatbotId } = req.params;
+        const chatbotId = Number(req.params.id);
         const entityManager = getManager();
         const chatbotEntity: Entities.chatbotEntity = Container.get("chatbotEntity");
         const skillEntity: Entities.skillEntity = Container.get("skillEntity");
