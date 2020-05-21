@@ -2,8 +2,9 @@ import { Router } from "express";
 import chatbot from "./routers/chatbot";
 
 export default () => {
-    const router: Router = Router();
+    const app: Router = Router();
     
-    chatbot({ router });
-    return router;
+    chatbot({ app });
+    
+    return app;
 };
