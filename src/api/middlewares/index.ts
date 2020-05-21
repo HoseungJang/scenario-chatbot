@@ -1,5 +1,7 @@
-import { checkExistChatbot } from "./checkExistChatbot";
+import { checkBeforeCreateChatbot } from "./checkBeforeCreateChatbot";
+import { checkBeforeCreateSkill } from "./checkBeforeCreateSkill";
 
 export default {
-    checkExistChatbot
+    checkBeforeCreateChatbot,
+    checkBeforeCreateSkill
 };
