@@ -9,7 +9,9 @@ export async function checkBeforeCreateInputBlock(req: Request, res: Response, n
         const inputEntity: Entities.inputEntity = Container.get("inputEntity");
         const buttonEntity: Entities.buttonEntity = Container.get("buttonEntity");
         
-        const input = await entityManager.findOne(inputEntity, previous);
+        const input = await entityManager.findOne(inputEntity, {
+            where: { previous }
+        });
 
         if (input) {
             return res.status(409).json({
@@ -18,7 +20,9 @@ export async function checkBeforeCreateInputBlock(req: Request, res: Response, n
         }
 
         
-        const button = await entityManager.findOne(buttonEntity, previous);
+        const button = await entityManager.findOne(buttonEntity, {
+            where: { previous }
+        });
 
         if (button) {
             return res.status(409).json({
