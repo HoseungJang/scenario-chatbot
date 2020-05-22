@@ -3,8 +3,10 @@ import expressLoader from "./express";
 import typeormLoader from "./typeorm";
 import dependencyInjectorLoader from "./dependencyInjector";
 
-export default ({ app }: { app: Application }) => {
-    typeormLoader();
-    expressLoader({ app });
+export default async ({ app }: { app: Application }) => {
+    await typeormLoader();
+
     dependencyInjectorLoader();
+    
+    expressLoader({ app });
 }
