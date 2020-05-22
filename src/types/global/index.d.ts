@@ -4,6 +4,7 @@ import { Skill } from "../../entities/skill";
 import { Block } from "../../entities/block";
 import { Message } from "../../entities/message";
 import { Input } from "../../entities/input";
+import { Button } from "../../entities/button";
 
 declare global {
     namespace Entities {
@@ -13,5 +14,6 @@ declare global {
         export type blockEntity = typeof Block;
         export type messageEntity = typeof Message;
         export type inputEntity = typeof Input;
+        export type buttonEntity = typeof Button;
     }
 }
