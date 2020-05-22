@@ -36,4 +36,25 @@ export class BlockService {
             throw err;
         }
     }
+
+    public async createInputBlock({ leftText, rightText, variableName, previous, jumpTo }: IInputDTO): Promise<IInput> {
+        try {
+            const previousBlock = await this.entityManager.findOne(this.blockEntity, previous);
+            const jumpToBlock = await this.entityManager.findOne(this.blockEntity, jumpTo);
+            const input = new this.inputEntity();
+
+            input.leftText = leftText;
+            input.rightText = rightText;
+            input.variableName = variableName;
+            input.previous = previousBlock;
+            input.jumpTo = jumpToBlock;
+            await this.entityManager.save(input);
+
+            const { id } = input;
+
+            return { id, leftText, rightText, variableName, previous, jumpTo };
+        } catch (err) {
+            throw err;
+        }
+    }
 }
