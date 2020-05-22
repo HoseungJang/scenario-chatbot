@@ -4,6 +4,7 @@ import { BlockService } from "../../services/block";
 import { IMessage, IMessageDTO } from "../../interfaces/IMessage";
 import upload from "../../config/multer";
 import middlewares from "../middlewares";
+import { IInput, IInputDTO } from "../../interfaces/IInput";
 
 const router: Router = Router();
 
@@ -23,5 +24,17 @@ export default ({ app }: { app: Router }) => {
             console.error(err);
             return next(err);
         }
-    })
+    });
+
+    router.post("/input", async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const blockServiceInstance = Container.get(BlockService);
+            const result: IInput = await blockServiceInstance.createInputBlock(req.body as IInputDTO);
+
+            return res.status(201).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
 }
