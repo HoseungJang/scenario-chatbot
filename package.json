@@ -26,7 +26,8 @@
     "typescript": "^3.9.2"
   },
   "scripts": {
-    "start": "ts-node src/app.ts --exit"
+    "start": "ts-node src/app.ts --exit",
+    "test": "mocha -r ts-node/register test/*.spec.ts --exit --timeout 10000ms"
   },
   "author": "HoseungJang",
   "license": "ISC"
