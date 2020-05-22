@@ -1,11 +1,12 @@
 import { Service, Inject } from "typedi";
-import { getManager } from "typeorm";
+import { InjectManager } from "typeorm-typedi-extensions";
 import { IChatbot, IChatbotDTO } from "../interfaces/IChatbot";
 import { ISkill, ISkillDTO } from "../interfaces/ISkill";
 
 @Service()
 export class ChatbotService {
     constructor(
+        @InjectManager() private entityManager: Entities.manager,
         @Inject("chatbotEntity") private chatbotEntity: Entities.chatbotEntity,
         @Inject("skillEntity") private skillEntity: Entities.skillEntity,
         @Inject("blockEntity") private blockEntity: Entities.blockEntity
@@ -13,12 +14,11 @@ export class ChatbotService {
 
     public async createChatbot({ name, role }: IChatbotDTO): Promise<IChatbot> {
         try {
-            const entityManager = getManager();
             const chatbot = new this.chatbotEntity();
 
             chatbot.name = name;
             chatbot.role = role;
-            await entityManager.save(chatbot);
+            await this.entityManager.save(chatbot);
 
             const { id } = chatbot;
 
@@ -30,18 +30,17 @@ export class ChatbotService {
 
     public async createSkill({ name, chatbotId }: ISkillDTO): Promise<ISkill> {
         try {
-            const entityManager = getManager();
-            const chatbot = await entityManager.findOne(this.chatbotEntity, chatbotId);
+            const chatbot = await this.entityManager.findOne(this.chatbotEntity, chatbotId);
             const skill = new this.skillEntity();
             const block = new this.blockEntity();
             
             skill.name = name;
             skill.chatbot = chatbot;
-            await entityManager.save(skill);
+            await this.entityManager.save(skill);
 
             block.name = "시작";
             block.skill = skill;
-            await entityManager.save(block);
+            await this.entityManager.save(block);
 
             const { id } = skill;
 
