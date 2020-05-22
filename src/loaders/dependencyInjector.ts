@@ -4,6 +4,7 @@ import { Skill } from "../entities/skill";
 import { Block } from "../entities/block";
 import { Message } from "../entities/message";
 import { Input } from "../entities/input";
+import { Button } from "../entities/button";
 
 export default () => {
     Container.set("chatbotEntity", Chatbot);
@@ -15,4 +16,6 @@ export default () => {
     Container.set("messageEntity", Message);
     
     Container.set("inputEntity", Input);
+    
+    Container.set("buttonEntity", Button);
 }
