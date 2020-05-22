@@ -3,6 +3,7 @@ import { Container } from "typedi";
 import { useContainer, createConnection, getManager, getConnection } from "typeorm";
 import { IMessage, IMessageDTO } from "../src/interfaces/IMessage";
 import { IInput, IInputDTO } from "../src/interfaces/IInput";
+import { IButton, IButtonDTO } from "../src/interfaces/IButton";
 import { BlockService } from "../src/services/block";
 import { Block } from "../src/entities/block";
 import { Message } from "../src/entities/message";
@@ -72,5 +73,26 @@ describe("BlockService", async () => {
         const input = await entityManager.findOne(Input, id);
 
         await entityManager.remove(input);
+    });
+
+    it("createButtonBlock", async () => {
+        const entityManager = getManager();
+        const blockServiceInstance = Container.get(BlockService);
+        const buttonDTO: IButtonDTO = {
+            buttons: [
+                { data: "테스트", jumpTo: -1 },
+                { data: "테스트2", jumpTo: -1 },
+            ],
+            blockId: -1
+        };
+        const result: IButton[] = await blockServiceInstance.createButtonBlock(buttonDTO);
+
+        expect(result[0]).to.have.all.keys("id", "data", "previous", "jumpTo");
+
+        for (const { id } of result) {
+            const button = await entityManager.findOne(Button, id);
+
+            await entityManager.remove(button);
+        }
     });
 });
