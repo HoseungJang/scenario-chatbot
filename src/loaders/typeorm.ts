@@ -1,6 +1,9 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { Container } from "typedi";
+import { useContainer, createConnection } from "typeorm";
 
 export default async () => {
+    useContainer(Container);
+    
     await createConnection();
 }
