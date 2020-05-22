@@ -29,11 +29,11 @@ export class Input {
         onDelete: "CASCADE"
     })
     @JoinColumn({ name: "previous" })
-    previous: number;
+    previous: Block;
 
     @ManyToOne(type => Block, {
         onDelete: "CASCADE"
     })
     @JoinColumn({ name: "jumpTo" })
-    jumpTo: number;
+    jumpTo: Block;
 }
