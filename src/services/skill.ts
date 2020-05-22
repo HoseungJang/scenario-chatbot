@@ -11,15 +11,19 @@ export class SkillService {
     ) { }
 
     public async createBlock({ name, skillId }: IBlockDTO): Promise<IBlock> {
-        const skill = await this.entityManager.findOne(this.skillEntity, skillId);
-        const block = new this.blockEntity();
+        try {
+            const skill = await this.entityManager.findOne(this.skillEntity, skillId);
+            const block = new this.blockEntity();
 
-        block.name = name;
-        block.skill = skill;
-        await this.entityManager.save(block);
+            block.name = name;
+            block.skill = skill;
+            await this.entityManager.save(block);
 
-        const { id } = block;
+            const { id } = block;
 
-        return { id, name };
+            return { id, name };
+        } catch (err) {
+            throw err;
+        }
     }
 }
