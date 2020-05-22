@@ -27,7 +27,7 @@ export default ({ app }: { app: Router }) => {
         }
     });
 
-    router.post("/input", async (req: Request, res: Response, next: NextFunction) => {
+    router.post("/input", middlewares.checkBeforeCreateInputBlock, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const blockServiceInstance = Container.get(BlockService);
             const result: IInput = await blockServiceInstance.createInputBlock(req.body as IInputDTO);
@@ -39,7 +39,7 @@ export default ({ app }: { app: Router }) => {
         }
     });
 
-    router.post("/button", async (req: Request, res: Response, next: NextFunction) => {
+    router.post("/button", middlewares.checkBeforeCreateButtonBlock, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const blockServiceInstance = Container.get(BlockService);
             const result: IButton[] = await blockServiceInstance.createButtonBlock(req.body as IButtonDTO);
