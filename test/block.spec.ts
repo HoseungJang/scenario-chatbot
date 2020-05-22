@@ -8,6 +8,8 @@ import { Block } from "../src/entities/block";
 import { Message } from "../src/entities/message";
 import { Input } from "../src/entities/input";
 import { Button } from "../src/entities/button";
+import * as dotenv from "dotenv";
+dotenv.config({ path: "test.env" });
 
 describe("BlockService", async () => {
     before(async () => {

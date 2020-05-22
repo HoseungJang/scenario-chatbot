@@ -7,6 +7,8 @@ import { ChatbotService } from "../src/services/chatbot";
 import { Chatbot } from "../src/entities/chatbot";
 import { Skill } from "../src/entities/skill";
 import { Block } from "../src/entities/block";
+import * as dotenv from "dotenv";
+dotenv.config({ path: "test.env" });
 
 describe("ChatbotService", async () => {
     before(async () => {
