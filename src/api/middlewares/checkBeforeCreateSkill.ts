@@ -19,7 +19,7 @@ export async function checkBeforeCreateSkill(req: Request, res: Response, next: 
         }
 
         const skill = await entityManager.findOne(skillEntity, {
-            where: { name, chatbotId }
+            where: { name, chatbot: chatbotId }
         });
 
         if (skill) {
