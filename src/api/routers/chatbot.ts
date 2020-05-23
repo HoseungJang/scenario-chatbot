@@ -47,4 +47,17 @@ export default ({ app }: { app: Router }) => {
             return next(err);
         }
     });
+
+    router.get("/:id/skill", middlewares.checkBeforeGetSkillList, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const chatbotId = Number(req.params.id);
+            const chatbotServiceInstance = Container.get(ChatbotService);
+            const result: ISkill[] = await chatbotServiceInstance.getSkillList(chatbotId);
+            
+            return res.status(201).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
 }
