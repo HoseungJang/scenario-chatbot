@@ -36,4 +36,25 @@ describe("SkillService", async () => {
 
         await entityManager.remove(block);
     });
+
+    it("getStartBlockId", async () => {
+        const entityManager = getManager();
+        const skillServiceInstance = Container.get(SkillService);
+        const skill = new Skill();
+        const block = new Block();
+
+        skill.name = "테스트스킬";
+        await entityManager.save(skill);
+
+        block.name = "시작";
+        block.skill = skill;
+        await entityManager.save(block);
+
+        const result: { id: number } = await skillServiceInstance.getStartBlockId(skill.id);
+
+        expect(result.id).to.equal(block.id);
+
+        await entityManager.remove(skill);
+        await entityManager.remove(block);
+    });
 });
