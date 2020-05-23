@@ -31,6 +31,8 @@ describe("ChatbotService", async () => {
         const result: IChatbot = await chatbotServiceInstance.createChatbot({ name, role } as IChatbotDTO);
 
         expect(result).to.have.all.keys("id", "name", "role");
+        expect(result.name).to.equal(name);
+        expect(result.role).to.equal(role);
 
         const { id } = result;
         const chatbot = await entityManager.findOne(Chatbot, id);
@@ -46,6 +48,7 @@ describe("ChatbotService", async () => {
         const result: ISkill = await chatbotServiceInstance.createSkill({ name, chatbotId } as ISkillDTO);
 
         expect(result).to.have.all.keys("id", "name");
+        expect(result.name).to.equal(name);
 
         const { id } = result;
         const skill = await entityManager.findOne(Skill, id);
