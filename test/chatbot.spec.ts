@@ -87,4 +87,35 @@ describe("ChatbotService", async () => {
 
         await entityManager.remove(skill);
     });
-})
+
+    it("getSkillList", async () => {
+        const entityManager = getManager();
+        const chatbotServiceInstance = Container.get(ChatbotService);
+        const chatbot = new Chatbot();
+        const skill1 = new Skill();
+        const skill2 = new Skill();
+
+        chatbot.name = "테스트챗봇1";
+        chatbot.role = "테스트";
+        await entityManager.save(chatbot);
+
+        skill1.name = "테스트스킬1";
+        skill1.chatbot = chatbot;
+        await entityManager.save(skill1);
+
+        skill2.name = "테스트스킬2";
+        skill2.chatbot = chatbot;
+        await entityManager.save(skill2);
+        
+        const result: ISkill[] = await chatbotServiceInstance.getSkillList(chatbot.id);
+
+        expect(result[0]).to.have.all.keys("id", "name");
+        expect(result[0].name).to.equal(skill1.name);
+
+        expect(result[1]).to.have.all.keys("id", "name");
+        expect(result[1].name).to.equal(skill2.name);
+
+        await entityManager.remove(skill1);
+        await entityManager.remove(skill2);
+    });
+});
