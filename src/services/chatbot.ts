@@ -28,6 +28,16 @@ export class ChatbotService {
         }
     }
 
+    public async getChatbotList(): Promise<IChatbot[]> {
+        try {
+            const result = await this.entityManager.find(this.chatbotEntity);
+    
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     public async createSkill({ name, chatbotId }: ISkillDTO): Promise<ISkill> {
         try {
             const chatbot = await this.entityManager.findOne(this.chatbotEntity, chatbotId);
