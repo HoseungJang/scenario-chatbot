@@ -29,7 +29,7 @@ describe("SkillService", async () => {
         };
         const result: IBlock = await skillServiceInstance.createBlock(blockDTO);
 
-        expect(result).to.have.all.keys("id", "name");
+        expect(result.name).to.equal(blockDTO.name);
 
         const { id } = result;
         const block = await entityManager.findOne(Block, id);
