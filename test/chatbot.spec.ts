@@ -115,6 +115,7 @@ describe("ChatbotService", async () => {
         expect(result[1]).to.have.all.keys("id", "name");
         expect(result[1].name).to.equal(skill2.name);
 
+        await entityManager.remove(chatbot);
         await entityManager.remove(skill1);
         await entityManager.remove(skill2);
     });
