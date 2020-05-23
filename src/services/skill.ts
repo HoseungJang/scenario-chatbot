@@ -26,4 +26,16 @@ export class SkillService {
             throw err;
         }
     }
+
+    public async getStartBlockId(skillId: number): Promise<{id: number}> {
+        try {
+            const block = await this.entityManager.findOne(this.blockEntity, {
+                where: { name: "시작", skill: skillId }
+            });
+
+            return { id: block.id };
+        } catch (err) {
+            throw err;
+        }
+    }
 }
