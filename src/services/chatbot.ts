@@ -30,7 +30,7 @@ export class ChatbotService {
 
     public async getChatbotList(): Promise<IChatbot[]> {
         try {
-            const result = await this.entityManager.find(this.chatbotEntity);
+            const result: IChatbot[] = await this.entityManager.find(this.chatbotEntity);
     
             return result;
         } catch (err) {
@@ -55,6 +55,18 @@ export class ChatbotService {
             const { id } = skill;
 
             return { id, name };
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public async getSkillList(chatbot: number): Promise<ISkill[]> {
+        try {
+            const result: ISkill[] = await this.entityManager.find(this.skillEntity, {
+                where: { chatbot }
+            });
+
+            return result;
         } catch (err) {
             throw err;
         }
