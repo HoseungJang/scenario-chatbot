@@ -22,4 +22,17 @@ export default ({ app }: { app: Router }) => {
             return next(err);
         }
     });
+
+    router.get("/:id/start", middlewares.checkBeforeGetStartBlock, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const skillId = Number(req.params.id);
+            const skillServiceInstance = Container.get(SkillService);
+            const result: { id: number } = await skillServiceInstance.getStartBlockId(skillId);
+    
+            return res.status(200).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
 }
