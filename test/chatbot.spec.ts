@@ -26,13 +26,15 @@ describe("ChatbotService", async () => {
     it("createChatbot", async () => {
         const entityManager = getManager();
         const chatbotServiceInstance = Container.get(ChatbotService);
-        const name = "테스트";
-        const role = "테스트용";
-        const result: IChatbot = await chatbotServiceInstance.createChatbot({ name, role } as IChatbotDTO);
+        const chatbotDTO: IChatbotDTO = {
+            name: "테스트",
+            role: "테스트용"
+        };
+        const result: IChatbot = await chatbotServiceInstance.createChatbot(chatbotDTO);
 
         expect(result).to.have.all.keys("id", "name", "role");
-        expect(result.name).to.equal(name);
-        expect(result.role).to.equal(role);
+        expect(result.name).to.equal(chatbotDTO.name);
+        expect(result.role).to.equal(chatbotDTO.role);
 
         const { id } = result;
         const chatbot = await entityManager.findOne(Chatbot, id);
@@ -40,15 +42,45 @@ describe("ChatbotService", async () => {
         await entityManager.remove(chatbot);
     });
 
+    it("getChatbotList", async () => {
+        const entityManager = getManager();
+        const chatbotServiceInstance = Container.get(ChatbotService);
+        const chatbot1 = new Chatbot();
+        const chatbot2 = new Chatbot();
+
+        chatbot1.name = "테스트챗봇1";
+        chatbot1.role = "테스트";
+        await entityManager.save(chatbot1);
+
+        chatbot2.name = "테스트챗봇2";
+        chatbot2.role = "테스트";
+        await entityManager.save(chatbot2);
+
+        const result: IChatbot[] = await chatbotServiceInstance.getChatbotList();
+
+        expect(result[0]).to.have.all.keys("id", "name", "role");
+        expect(result[0].name).to.equal(chatbot1.name);
+        expect(result[0].role).to.equal(chatbot1.role);
+
+        expect(result[1]).to.have.all.keys("id", "name", "role");
+        expect(result[1].name).to.equal(chatbot2.name);
+        expect(result[1].role).to.equal(chatbot2.role);
+
+        await entityManager.remove(chatbot1);
+        await entityManager.remove(chatbot2);
+    });
+
     it("createSkill", async () => {
         const entityManager = getManager();
         const chatbotServiceInstance = Container.get(ChatbotService);
-        const name = "테스트스킬";
-        const chatbotId = -1;
-        const result: ISkill = await chatbotServiceInstance.createSkill({ name, chatbotId } as ISkillDTO);
+        const skillDTO: ISkillDTO = {
+            name: "테스트스킬",
+            chatbotId: -1
+        }
+        const result: ISkill = await chatbotServiceInstance.createSkill(skillDTO);
 
         expect(result).to.have.all.keys("id", "name");
-        expect(result.name).to.equal(name);
+        expect(result.name).to.equal(skillDTO.name);
 
         const { id } = result;
         const skill = await entityManager.findOne(Skill, id);
