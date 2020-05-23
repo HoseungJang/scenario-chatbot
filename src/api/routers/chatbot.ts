@@ -22,6 +22,18 @@ export default ({ app }: { app: Router }) => {
         }
     });
 
+    router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const chatbotServiceInstance = Container.get(ChatbotService);
+            const result: IChatbot[] = await chatbotServiceInstance.getChatbotList();
+    
+            return res.status(200).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
+
     router.post("/:id/skill", middlewares.checkBeforeCreateSkill, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { name } = req.body;
