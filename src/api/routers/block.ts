@@ -12,7 +12,7 @@ const router: Router = Router();
 export default ({ app }: { app: Router }) => {
     app.use("/block", router);
 
-    router.post("/:id/message", upload.array("images"), async (req: Request, res: Response, next: NextFunction) => {
+    router.post("/:id/message", middlewares.checkBeforeCreateMessage, upload.array("images"), async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { messages } = req.body;
             const images = req.files as Express.Multer.File[];
