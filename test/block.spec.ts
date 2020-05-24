@@ -10,6 +10,7 @@ import { Message } from "../src/entities/message";
 import { Input } from "../src/entities/input";
 import { Button } from "../src/entities/button";
 import * as dotenv from "dotenv";
+import { IBlockInfo } from "../src/interfaces/IBlock";
 dotenv.config({ path: "test.env" });
 
 describe("BlockService", async () => {
@@ -115,5 +116,104 @@ describe("BlockService", async () => {
 
             await entityManager.remove(button);
         }
+    });
+
+    it("getBlockInfo", async () => {
+        const entityManager = getManager();
+        const blockServiceInstance = Container.get(BlockService);
+        const block1 = new Block();
+        const block2 = new Block();
+        const block3 = new Block();
+        const message1 = new Message();
+        const message2 = new Message();
+        const message3 = new Message();
+        const message4 = new Message();
+        const input = new Input();
+        const button1 = new Button();
+        const button2 = new Button();
+
+        block1.name = "테스트블록1";
+        await entityManager.save(block1);
+
+        block2.name = "테스트블록2";
+        await entityManager.save(block2);
+
+        block3.name = "테스트블록3";
+        await entityManager.save(block3);
+
+        message1.type = "text";
+        message1.data = "너의 이름은 뭐니?";
+        message1.block = block1;
+        message1.slot = false;
+        await entityManager.save(message1);
+
+        message2.type = "text";
+        message2.data = "멋진 이름이다. ${name}!";
+        message2.block = block2;
+        message2.slot = true;
+        await entityManager.save(message2);
+
+        message3.type = "image";
+        message3.data = "/src/uploads/asdf.png";
+        message3.block = block3;
+        message3.slot = false;
+        await entityManager.save(message3);
+
+        message4.type = "text";
+        message4.data = "그럼 잘있어 ${name}!";
+        message4.block = block3;
+        message4.slot = true;
+        await entityManager.save(message4);
+
+        input.leftText = "내 이름은";
+        input.rightText = "이야.";
+        input.variableName = "name";
+        input.previous = block1;
+        input.jumpTo = block2;
+        await entityManager.save(input);
+
+        button1.data = "그런가..";
+        button1.previous = block2;
+        button1.jumpTo = block3;
+        await entityManager.save(button1);
+
+        button2.data = "고마워!";
+        button2.previous = block2;
+        button2.jumpTo = block3;
+        await entityManager.save(button2);
+
+        const result1: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId: block1.id, variables: [] });
+        
+        expect(result1).to.have.all.keys("messages", "next");
+        expect(result1.messages[0].type).to.equal(message1.type);
+        expect(result1.messages[0].data).to.equal(message1.data);
+        expect(result1.next).to.equal("input");
+
+        const result2: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId: block2.id, variables: [{ name: "name", data: "홍길동" }] });
+
+        expect(result2).to.have.all.keys("messages", "next");
+        expect(result2.messages[0].type).to.equal(message1.type);
+        expect(result2.messages[0].data).to.equal("멋진 이름이다. 홍길동!");
+        expect(result2.next).to.equal("button");
+
+        const result3: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId: block3.id, variables: [{ name: "name", data: "홍길동" }] });
+
+        expect(result3).to.have.all.keys("messages", "next");
+        expect(result3.messages[0].type).to.equal(message3.type);
+        expect(result3.messages[0].data).to.equal(message3.data);
+        expect(result3.messages[1].type).to.equal(message4.type);
+        expect(result3.messages[1].data).to.equal("그럼 잘있어 홍길동!");
+        expect(result3.next).to.equal(null);
+
+        await entityManager.remove(block1);
+        await entityManager.remove(block2);
+        await entityManager.remove(block3);
+        await entityManager.remove(message1);
+        await entityManager.remove(message2);
+        await entityManager.remove(message3);
+        await entityManager.remove(message4);
+        await entityManager.remove(input);
+        await entityManager.remove(button1);
+        await entityManager.remove(button2);
     });
 });
