@@ -8,6 +8,7 @@ import { checkBeforeCreateMessage } from "./checkBeforeCreateMessage";
 import { checkBeforeCreateInputBlock } from "./checkBeforeCreateInputBlock";
 import { checkBeforeGetInputBlock } from "./checkBeforeGetInputBlock";
 import { checkBeforeCreateButtonBlock } from "./checkBeforeCreateButtonBlock";
+import { checkBeforeGetButtonBlock } from "./checkBeoreGetButtonBlock";
 
 export default {
     checkBeforeCreateChatbot,
@@ -19,5 +20,6 @@ export default {
     checkBeforeCreateMessage,
     checkBeforeCreateInputBlock,
     checkBeforeGetInputBlock,
-    checkBeforeCreateButtonBlock
+    checkBeforeCreateButtonBlock,
+    checkBeforeGetButtonBlock
 }
