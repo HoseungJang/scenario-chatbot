@@ -35,7 +35,7 @@ describe("BlockService", async () => {
             }] as Express.Multer.File[],
             messages: [{
                 type: "text",
-                data: "안녕?",
+                data: "테스트메시지",
                 slot: false
             }, {
                 type: "image",
@@ -47,6 +47,14 @@ describe("BlockService", async () => {
         const result: IMessage[] = await blockServiceInstance.createMessage(messageDTO);
 
         expect(result[0]).to.have.all.keys("id", "type", "data", "slot");
+        expect(result[0].type).to.equal("text");
+        expect(result[0].data).to.equal("테스트메시지");
+        expect(result[0].slot).to.equal(false);
+        
+        expect(result[1]).to.have.all.keys("id", "type", "data", "slot");
+        expect(result[1].type).to.equal("image");
+        expect(result[1].data).to.equal("/src/uploads/asdfasdf.png");
+        expect(result[1].slot).to.equal(false);
 
         for (const { id } of result) {
             const message = await entityManager.findOne(Message, id);
@@ -68,6 +76,11 @@ describe("BlockService", async () => {
         const result: IInput = await blockServiceInstance.createInputBlock(inputDTO);
 
         expect(result).to.have.all.keys("id", "leftText", "rightText", "variableName", "previous", "jumpTo");
+        expect(result.leftText).to.equal(inputDTO.leftText);
+        expect(result.rightText).to.equal(inputDTO.rightText);
+        expect(result.variableName).to.equal(inputDTO.variableName);
+        expect(result.previous).to.equal(inputDTO.previous);
+        expect(result.jumpTo).to.equal(inputDTO.jumpTo);
 
         const { id } = result;
         const input = await entityManager.findOne(Input, id);
@@ -80,7 +93,7 @@ describe("BlockService", async () => {
         const blockServiceInstance = Container.get(BlockService);
         const buttonDTO: IButtonDTO = {
             buttons: [
-                { data: "테스트", jumpTo: -1 },
+                { data: "테스트1", jumpTo: -1 },
                 { data: "테스트2", jumpTo: -1 },
             ],
             blockId: -1
@@ -88,6 +101,14 @@ describe("BlockService", async () => {
         const result: IButton[] = await blockServiceInstance.createButtonBlock(buttonDTO);
 
         expect(result[0]).to.have.all.keys("id", "data", "previous", "jumpTo");
+        expect(result[0].data).to.equal(buttonDTO.buttons[0].data);
+        expect(result[0].previous).to.equal(buttonDTO.blockId);
+        expect(result[0].jumpTo).to.equal(buttonDTO.buttons[0].jumpTo);
+
+        expect(result[1]).to.have.all.keys("id", "data", "previous", "jumpTo");
+        expect(result[1].data).to.equal(buttonDTO.buttons[1].data);
+        expect(result[1].previous).to.equal(buttonDTO.blockId);
+        expect(result[1].jumpTo).to.equal(buttonDTO.buttons[1].jumpTo);
 
         for (const { id } of result) {
             const button = await entityManager.findOne(Button, id);
