@@ -6,7 +6,7 @@ import upload from "../../config/multer";
 import middlewares from "../middlewares";
 import { IInput, IInputDTO } from "../../interfaces/IInput";
 import { IButton, IButtonDTO } from "../../interfaces/IButton";
-import { IBlockInfo } from "../../interfaces/IBlock";
+import { IBlockInfo, IBlockInfoDTO } from "../../interfaces/IBlock";
 
 const router: Router = Router();
 
@@ -15,10 +15,10 @@ export default ({ app }: { app: Router }) => {
 
     router.get("/:id/info", middlewares.checkBeforeGetBlockInfo, async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { variables } = req.body;
+            const { variables } = req.query;
             const blockId = Number(req.params.id);
             const blockServiceInstance = Container.get(BlockService);
-            const result: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId, variables });
+            const result: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId, variables } as IBlockInfoDTO);
 
             return res.status(200).json({ result });
         } catch (err) {

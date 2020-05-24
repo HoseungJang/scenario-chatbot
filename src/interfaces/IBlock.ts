@@ -15,3 +15,11 @@ export interface IBlockInfo {
     }[];
     next: "input" | "button" | null;
 }
+
+export interface IBlockInfoDTO {
+    blockId: number;
+    variables: {
+        name: string,
+        data: string
+    }[];
+}

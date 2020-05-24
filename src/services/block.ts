@@ -3,7 +3,7 @@ import { InjectManager } from "typeorm-typedi-extensions"
 import { IMessage, IMessageDTO } from "../interfaces/IMessage";
 import { IInput, IInputDTO } from "../interfaces/IInput";
 import { IButton, IButtonDTO } from "../interfaces/IButton";
-import { IBlockInfo } from "../interfaces/IBlock";
+import { IBlockInfo, IBlockInfoDTO } from "../interfaces/IBlock";
 
 @Service()
 export class BlockService {
@@ -86,7 +86,7 @@ export class BlockService {
         }
     }
 
-    public async getBlockInfo({ blockId, variables }: { blockId: number, variables: { name: string, data: string }[] }): Promise<IBlockInfo> {
+    public async getBlockInfo({ blockId, variables }: IBlockInfoDTO): Promise<IBlockInfo> {
         try{
             const messages = await this.entityManager.find(this.messageEntity, {
                 where: { block: blockId },

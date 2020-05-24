@@ -54,7 +54,7 @@ export default ({ app }: { app: Router }) => {
             const chatbotServiceInstance = Container.get(ChatbotService);
             const result: ISkill[] = await chatbotServiceInstance.getSkillList(chatbotId);
             
-            return res.status(201).json({ result });
+            return res.status(200).json({ result });
         } catch (err) {
             console.error(err);
             return next(err);
