@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Container } from "typedi";
-import { useContainer, createConnection, getManager, getConnection } from "typeorm";
+import { useContainer, createConnection, getManager, getConnection, In } from "typeorm";
 import { IMessage, IMessageDTO } from "../src/interfaces/IMessage";
 import { IInput, IInputDTO } from "../src/interfaces/IInput";
 import { IButton, IButtonDTO } from "../src/interfaces/IButton";
@@ -213,6 +213,79 @@ describe("BlockService", async () => {
         await entityManager.remove(message3);
         await entityManager.remove(message4);
         await entityManager.remove(input);
+        await entityManager.remove(button1);
+        await entityManager.remove(button2);
+    });
+
+    it("getInputBlock", async () => {
+        const entityManager = getManager();
+        const blockServiceInstance = Container.get(BlockService);
+        const block1 = new Block();
+        const block2 = new Block();
+        const input = new Input();
+
+        block1.name = "테스트블록1";
+        await entityManager.save(block1);
+
+        block2.name = "테스트블록2";
+        await entityManager.save(block2);
+
+        input.leftText = "테스트";
+        input.rightText = "테스트";
+        input.variableName = "test";
+        input.previous = block1;
+        input.jumpTo = block2;
+        await entityManager.save(input);
+
+        const result: { leftText: string, rightText: string, variableName: string, jumpTo: number } = await blockServiceInstance.getInputBlock(block1.id);
+
+        expect(result).to.have.all.keys("leftText", "rightText", "variableName", "jumpTo");
+        expect(result.leftText).to.equal(input.leftText);
+        expect(result.rightText).to.equal(input.rightText);
+        expect(result.variableName).to.equal(input.variableName);
+        expect(result.jumpTo).to.equal(input.jumpTo.id);
+
+        await entityManager.remove(block1);
+        await entityManager.remove(block2);
+        await entityManager.remove(input);
+    });
+
+    it("getInputBlock", async () => {
+        const entityManager = getManager();
+        const blockServiceInstance = Container.get(BlockService);
+        const block1 = new Block();
+        const block2 = new Block();
+        const button1 = new Button();
+        const button2 = new Button();
+
+        block1.name = "테스트블록1";
+        await entityManager.save(block1);
+
+        block2.name = "테스트블록2";
+        await entityManager.save(block2);
+
+        button1.data = "테스트버튼1";
+        button1.previous = block1;
+        button1.jumpTo = block2;
+        await entityManager.save(button1);
+
+        button2.data = "테스트버튼2";
+        button2.previous = block1;
+        button2.jumpTo = block2;
+        await entityManager.save(button2);
+
+        const result: { data: string, jumpTo: number }[] = await blockServiceInstance.getButtonBlock(block1.id);
+
+        expect(result[0]).to.have.all.keys("data", "jumpTo");
+        expect(result[0].data).to.equal(button1.data);
+        expect(result[0].jumpTo).to.equal(button1.jumpTo.id);
+
+        expect(result[1]).to.have.all.keys("data", "jumpTo");
+        expect(result[1].data).to.equal(button2.data);
+        expect(result[1].jumpTo).to.equal(button2.jumpTo.id);
+
+        await entityManager.remove(block1);
+        await entityManager.remove(block2);
         await entityManager.remove(button1);
         await entityManager.remove(button2);
     });
