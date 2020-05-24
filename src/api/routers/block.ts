@@ -13,6 +13,20 @@ const router: Router = Router();
 export default ({ app }: { app: Router }) => {
     app.use("/block", router);
 
+    router.get("/:id/info", middlewares.checkBeforeGetBlockInfo, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { variables } = req.body;
+            const blockId = Number(req.params.id);
+            const blockServiceInstance = Container.get(BlockService);
+            const result: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId, variables });
+
+            return res.status(200).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
+
     router.post("/:id/message", middlewares.checkBeforeCreateMessage, upload.array("images"), async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { messages } = req.body;
@@ -40,26 +54,25 @@ export default ({ app }: { app: Router }) => {
         }
     });
 
-    router.post("/button", middlewares.checkBeforeCreateButtonBlock, async (req: Request, res: Response, next: NextFunction) => {
+    router.get("/:id/input", middlewares.checkBeforeGetInputBlock, async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const blockId = Number(req.params.id);
             const blockServiceInstance = Container.get(BlockService);
-            const result: IButton[] = await blockServiceInstance.createButtonBlock(req.body as IButtonDTO);
+            const result: { leftText: string, rightText: string, variableName: string, jumpTo: number } = await blockServiceInstance.getInputBlock(blockId);
 
-            return res.status(201).json({ result });
+            return res.status(200).json({ result });
         } catch (err) {
             console.error(err);
             return next(err);
         }
     });
 
-    router.get("/:id/info", middlewares.checkBeforeGetBlockInfo, async (req: Request, res: Response, next: NextFunction) => {
+    router.post("/button", middlewares.checkBeforeCreateButtonBlock, async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { variables } = req.body;
-            const blockId = Number(req.params.id);
             const blockServiceInstance = Container.get(BlockService);
-            const result: IBlockInfo = await blockServiceInstance.getBlockInfo({ blockId, variables });
+            const result: IButton[] = await blockServiceInstance.createButtonBlock(req.body as IButtonDTO);
 
-            return res.status(200).json({ result });
+            return res.status(201).json({ result });
         } catch (err) {
             console.error(err);
             return next(err);
