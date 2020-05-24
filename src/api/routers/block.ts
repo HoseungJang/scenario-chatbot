@@ -78,4 +78,17 @@ export default ({ app }: { app: Router }) => {
             return next(err);
         }
     });
+
+    router.get("/:id/button", middlewares.checkBeforeGetButtonBlock, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const blockId = Number(req.params.id);
+            const blockServiceInstance = Container.get(BlockService);
+            const result: { data: string, jumpTo: number }[] = await blockServiceInstance.getButtonBlock(blockId);
+
+            return res.status(200).json({ result });
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
 }
