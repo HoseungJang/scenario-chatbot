@@ -3,6 +3,7 @@ import { InjectManager } from "typeorm-typedi-extensions"
 import { IMessage, IMessageDTO } from "../interfaces/IMessage";
 import { IInput, IInputDTO } from "../interfaces/IInput";
 import { IButton, IButtonDTO } from "../interfaces/IButton";
+import { IBlockInfo } from "../interfaces/IBlock";
 
 @Service()
 export class BlockService {
@@ -78,6 +79,39 @@ export class BlockService {
     
                 result.push({ id, data, previous, jumpTo });
             }
+    
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public async getBlockInfo({ blockId, variables }: { blockId: number, variables: { name: string, data: string }[] }): Promise<IBlockInfo> {
+        try{
+            const messages = await this.entityManager.find(this.messageEntity, {
+                where: { block: blockId },
+                order: { id: "ASC" }
+            });
+            const input = await this.entityManager.findOne(this.inputEntity, {
+                where: { previous: blockId }
+            });
+            const button = await this.entityManager.findOne(this.buttonEntity, {
+                where: { previous: blockId }
+            });
+            const result: IBlockInfo = {
+                messages: messages.map(e => {
+                    if (e.slot) {
+                        variables.map(({ name, data }) => {
+                            e.data = e.data.split("${" + name + "}").join(data);
+                        });
+                    }
+                    return {
+                        type: e.type as "text" | "image",
+                        data: e.data
+                    };
+                }),
+                next: input ? "input" : button ? "button" : null
+            };
     
             return result;
         } catch (err) {
