@@ -118,4 +118,40 @@ export class BlockService {
             throw err;
         }
     }
+
+    public async getInputBlock(blockId: number): Promise<{ leftText: string, rightText: string, variableName: string, jumpTo: number }> {
+        try {
+            const input = await this.entityManager.findOne(this.inputEntity, {
+                where: { previous: blockId },
+                relations: ["jumpTo"]
+            });
+            const { leftText, rightText, variableName } = input;
+            const jumpTo = input.jumpTo.id;
+
+            return { leftText, rightText, variableName, jumpTo };
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public async getButtonBlock(blockId: number): Promise<{ data: string, jumpTo: number }[]> {
+        try {
+            const buttons = await this.entityManager.find(this.buttonEntity, {
+                where: { previous: blockId },
+                relations: ["jumpTo"]
+            });
+            const result: { data: string, jumpTo: number }[] = [];
+
+            for (const button of buttons) {
+                result.push({
+                    data: button.data,
+                    jumpTo: button.jumpTo.id
+                });
+            }
+
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
 }
